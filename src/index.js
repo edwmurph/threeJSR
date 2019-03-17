@@ -1,5 +1,7 @@
-import TodaysDate from './TodaysDate'
+import SafeThreeJS from './SafeThreeJS'
+import ThreeJS from './ThreeJS'
 
 export default {
-  TodaysDate
+  SafeThreeJS,
+  ThreeJS
 }
