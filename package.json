@@ -1,8 +1,8 @@
 {
-  "name": "threejs-react-redux",
+  "name": "trr",
   "version": "1.0.0",
   "description": "A library for creating safe threejs components",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "build": "babel src -d build",
     "prepare": "npm run build"
@@ -14,14 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/edwmurph/threejs-react-redux.git"
+    "url": "git+https://github.com/edwmurph/trr.git"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/edwmurph/threejs-react-redux/issues"
-  },
-  "homepage": "https://github.com/edwmurph/threejs-react-redux#readme",
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-preset-env": "1.7.0",
@@ -37,12 +33,6 @@
     "react": "16.8.4",
     "react-redux": "6.0.1",
     "redux": "4.0.1",
-    "three": "0.102.1",
-    "webpack": "2.7.0",
-    "webpack-cli": "3.3.0"
-  },
-  "dependencies": {},
-  "alias": {
-    "react": "../node_modules/vue/dist/vue.js"
+    "three": "0.102.1"
   }
 }
