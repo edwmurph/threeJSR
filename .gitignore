@@ -1,0 +1,9 @@
+*.swp
+.DS_Store
+node_modules/*
+
+# Parcel
+dist/
+.cache/
+
+.git
