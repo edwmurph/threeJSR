@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-export default class ThreeJS {
+export default class ThreeJSR {
   constructor(ref, newFrameHook) {
     this.ref = ref
     this.newFrameHook = newFrameHook
@@ -9,7 +9,7 @@ export default class ThreeJS {
 
   // USAGE: call inside componentDidMount()
   afterMount() {
-    ThreeJS.verifyEnv()
+    ThreeJSR.verifyEnv()
     window.addEventListener('resize', this.onResize.bind(this))
 
     this.createThreeScene()
@@ -39,7 +39,7 @@ export default class ThreeJS {
   }
 
   createThreeScene() {
-    throw new Error('must implement ThreeJS.createThreeScene()')
+    throw new Error('must implement createThreeScene()')
   }
 
   onResize() {
@@ -59,7 +59,7 @@ export default class ThreeJS {
         throw new Error()
       }
     } catch (e) {
-      throw new Error('WebGL is not available on your system')
+      throw new Error('WebGL is not available on your browser')
     }
   }
 }

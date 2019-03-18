@@ -1,7 +1,9 @@
-import SafeThreeJS from './SafeThreeJS'
-import ThreeJS from './ThreeJS'
+import SafeThreeJSRComponent from './components/SafeThreeJSRComponent'
+import ThreeJSR from './ThreeJSR'
+import reducer from './reducers/index'
 
-export default {
-  SafeThreeJS,
-  ThreeJS
+export {
+  SafeThreeJSRComponent,
+  ThreeJSR,
+  reducer
 }

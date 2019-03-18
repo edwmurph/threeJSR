@@ -1,14 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-class Component extends React.Component {
+class ThreeJSRComponent extends React.Component {
   constructor(props) {
     super(props)
     this.ref = React.createRef()
-    this.threejs = new this.props.ThreeJS(
+    this.threejs = new this.props.ThreeJSR(
       this.ref,
       timestamp => this.props.update({ timestamp }),
     )
+
+    this.events = {}
+    for (let key in this.props.events || {}) {
+      this.events[key] = function(e) {
+        return this.props.threeJSR(
+          this.props.events[key](e)
+        )
+      }
+      this.events[key] = this.events[key].bind(this)
+    }
   }
 
   componentDidMount() {
@@ -25,7 +35,7 @@ class Component extends React.Component {
 
   render() {
     return (
-      <div ref={this.ref} onMouseDown={this.props.mouseDown} />
+      <div ref={this.ref} {...this.events} />
     )
   }
 }
@@ -33,7 +43,7 @@ class Component extends React.Component {
 function mapStateToProps(state) {
   return {
     timestamp: state.timestamp,
-    mouse: state.mouse,
+    threejsr: state.threejsr,
   }
 }
 
@@ -43,14 +53,11 @@ function mapDispatchToProps(dispatch) {
       type: 'TIMESTAMP',
       timestamp,
     }),
-    mouseDown: e => dispatch({
-      type: 'MOUSE_DOWN',
-      mouse: {
-        x: e.screenX,
-        y: e.screenY,
-      },
-    }),
+    threeJSR: e => dispatch({
+      type: 'THREEJSR',
+      e
+    })
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Component)
+export default connect(mapStateToProps, mapDispatchToProps)(ThreeJSRComponent)
