@@ -11,14 +11,9 @@ class ThreeJSRComponent extends React.Component {
     )
 
     this.events = {}
-    for (let key in this.props.events || {}) {
-      this.events[key] = function(e) {
-        return this.props.threeJSR(
-          this.props.events[key](e)
-        )
-      }
-      this.events[key] = this.events[key].bind(this)
-    }
+    Object.entries(this.props.events || {}).forEach(([key, fn]) => {
+      this.events[key] = e => this.props.threeJSR( fn(e) )
+    })
   }
 
   componentDidMount() {
