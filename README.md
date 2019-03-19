@@ -12,14 +12,14 @@ npm i git+ssh://git@github.com:edwmurph/threeJSR.git
 
 # Usage
 
-1. Add ThreeJSR `timestamp` reducer to your root reducers:
+1. Add ThreeJSR `threejsr` reducer to your root reducers:
 ```
 // src/reducers/index.js
 import { combineReducers } from 'redux'
-import { timestamp } from 'threeJSR'
+import { reducer as threejsr } from 'threeJSR'
 
 export default combineReducers({
-  timestamp
+  threejsr,
   ...
 })
 ```
@@ -31,11 +31,15 @@ import * as THREE from 'three'
 import { ThreeJSR } from 'threeJSR'
 
 export default class Sphere extends ThreeJSR {
-  renderNextFrame({ timestamp }) {
+  renderNextFrame({ threejsr }) {
+    if (threejsr.mouse) {
+      console.log('inside sphere:', threejsr.mouse)
+    }
+
     this.mesh.rotation.x += 0.001
     this.mesh.rotation.y += 0.001
 
-    return super.renderNextFrame(timestamp)
+    return super.renderNextFrame(threejsr)
   }
 
   createThreeScene() {
@@ -65,10 +69,16 @@ import React from 'react'
 import Sphere from '../threejs/sphere'
 import { SafeThreeJSRComponent } from 'threeJSR'
 
+const events = {
+  onMouseDown: function(e) {
+    return { mouse: { x: e.screenX, y: e.screenY } }
+  }
+}
+
 export default class App extends React.Component {
   render() {
     return (
-      <SafeThreeJSRComponent ThreeJSR={Sphere} />
+      <SafeThreeJSRComponent ThreeJSR={Sphere} events={events} />
     )
   }
 }

@@ -23,7 +23,7 @@ export default class ThreeJSR {
   }
 
   // USAGE: call inside componentDidUpdate()
-  renderNextFrame(timestamp) {
+  renderNextFrame({ timestamp } = {}) {
     if (timestamp) {
       this.renderer.render(this.scene, this.camera)
       this.frameId = requestAnimationFrame(this.newFrameHook)
