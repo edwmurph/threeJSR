@@ -1,5 +1,5 @@
 {
-  "name": "threeJSR",
+  "name": "threejs-r",
   "version": "1.0.0",
   "description": "A library for creating threejs components with react + redux",
   "main": "build/index.js",

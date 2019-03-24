@@ -7,7 +7,7 @@ See example usage: https://github.com/edwmurph/threejs
 # Installation
 
 ```
-npm i git+ssh://git@github.com:edwmurph/threeJSR.git
+npm i threejs-r
 ```
 
 # Usage
@@ -16,7 +16,7 @@ npm i git+ssh://git@github.com:edwmurph/threeJSR.git
 ```
 // src/reducers/index.js
 import { combineReducers } from 'redux'
-import { reducer as threejsr } from 'threeJSR'
+import { reducer as threejsr } from 'threejs-r'
 
 export default combineReducers({
   threejsr,
@@ -28,7 +28,7 @@ export default combineReducers({
 ```
 // src/threejs/sphere.js
 import * as THREE from 'three'
-import { ThreeJSR } from 'threeJSR'
+import { ThreeJSR } from 'threejs-r'
 
 export default class Sphere extends ThreeJSR {
   renderNextFrame({ threejsr }) {
@@ -67,7 +67,7 @@ export default class Sphere extends ThreeJSR {
 // src/components/App.js
 import React from 'react'
 import Sphere from '../threejs/sphere'
-import { SafeThreeJSRComponent } from 'threeJSR'
+import { SafeThreeJSRComponent } from 'threejs-r'
 
 const events = {
   onMouseDown: function(e) {
