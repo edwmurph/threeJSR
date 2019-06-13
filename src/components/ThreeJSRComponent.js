@@ -2,51 +2,51 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 class ThreeJSRComponent extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.ref = React.createRef()
     this.threejs = new this.props.ThreeJSR(
       this.ref,
-      timestamp => this.props.update({ timestamp }),
+      timestamp => this.props.update({ timestamp })
     )
 
     this.events = {}
     Object.entries(this.props.events || {}).forEach(([key, fn]) => {
-      this.events[key] = e => this.props.threeJSR( fn(e) )
+      this.events[key] = e => this.props.threeJSR(fn(e))
     })
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.threejs.afterMount()
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     this.threejs.renderNextFrame(this.props)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.threejs.cleanup()
   }
 
-  render() {
+  render () {
     return (
       <div ref={this.ref} {...this.events} />
     )
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     timestamp: state.timestamp,
-    threejsr: state.threejsr,
+    threejsr: state.threejsr
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return {
     update: timestamp => dispatch({
       type: 'TIMESTAMP',
-      timestamp,
+      timestamp
     }),
     threeJSR: e => dispatch({
       type: 'THREEJSR',

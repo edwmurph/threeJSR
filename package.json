@@ -8,27 +8,29 @@
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "react": "*",
-    "react-redux": "*",
-    "three": "*"
+    "react": "^16",
+    "react-redux": "^7",
+    "three": "^0"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.4.4",
+    "@babel/core": "7.4.5",
+    "@babel/preset-env": "7.4.5",
+    "@babel/preset-react": "7.0.0",
+    "babel-eslint": "10.0.1",
+    "eslint": "5.16.0",
+    "eslint-config-standard": "12.0.0",
+    "eslint-config-standard-react": "7.0.2",
+    "eslint-plugin-import": "2.17.3",
+    "eslint-plugin-node": "9.1.0",
+    "eslint-plugin-promise": "4.1.1",
+    "eslint-plugin-react": "7.13.0",
+    "eslint-plugin-standard": "4.0.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/edwmurph/threeJSR.git"
   },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/cli": "7.2.3",
-    "@babel/core": "7.3.4",
-    "@babel/preset-env": "7.3.4",
-    "@babel/preset-react": "7.0.0",
-    "eslint": "5.15.2",
-    "eslint-config-standard": "12.0.0",
-    "eslint-plugin-import": "2.16.0",
-    "eslint-plugin-node": "8.0.1",
-    "eslint-plugin-promise": "4.0.1",
-    "eslint-plugin-react": "7.12.4",
-    "eslint-plugin-standard": "4.0.0"
-  }
+  "author": "Edward",
+  "license": "ISC"
 }

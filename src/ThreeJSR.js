@@ -1,14 +1,14 @@
 import * as THREE from 'three'
 
 export default class ThreeJSR {
-  constructor(ref, newFrameHook) {
+  constructor (ref, newFrameHook) {
     this.ref = ref
     this.newFrameHook = newFrameHook
     this.camera = {}
   }
 
   // USAGE: call inside componentDidMount()
-  afterMount() {
+  afterMount () {
     ThreeJSR.verifyEnv()
     window.addEventListener('resize', this.onResize.bind(this))
 
@@ -23,7 +23,7 @@ export default class ThreeJSR {
   }
 
   // USAGE: call inside componentDidUpdate()
-  renderNextFrame({ timestamp } = {}) {
+  renderNextFrame ({ timestamp } = {}) {
     if (timestamp) {
       this.renderer.render(this.scene, this.camera)
       this.frameId = requestAnimationFrame(this.newFrameHook)
@@ -31,18 +31,18 @@ export default class ThreeJSR {
   }
 
   // USAGE: call inside componentWillUnmount()
-  cleanup() {
+  cleanup () {
     window.removeEventListener('resize', this.onResize)
     if (this.frameId) {
       cancelAnimationFrame(this.frameId)
     }
   }
 
-  createThreeScene() {
+  createThreeScene () {
     throw new Error('must implement createThreeScene()')
   }
 
-  onResize() {
+  onResize () {
     this.width = window.innerWidth
     this.height = Math.max(window.innerHeight - 200, 200)
     this.camera.aspect = this.width / this.height
@@ -50,7 +50,7 @@ export default class ThreeJSR {
     this.renderer.setSize(this.width, this.height)
   }
 
-  static verifyEnv() {
+  static verifyEnv () {
     try {
       const canvas = document.createElement('canvas')
       const meetsRequirements = !!(window.WebGLRenderingContext &&

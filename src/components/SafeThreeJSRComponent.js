@@ -3,7 +3,7 @@ import ThreeJSRComponent from './ThreeJSRComponent'
 import ErrorBoundary from './ErrorBoundary'
 
 export default class SafeThreeJSRComponent extends React.Component {
-  render() {
+  render () {
     return (
       <ErrorBoundary>
         <ThreeJSRComponent
