@@ -1,0 +1,13 @@
+.full-screen {
+  width: 100vw;
+  height: 100vh;
+}
+
+.fixed-top {
+  position: fixed !important;
+  top: 0 !important;
+}
+
+.z--1 {
+  z-index: -1;
+}

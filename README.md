@@ -1,6 +1,6 @@
 # ThreeJSR
 
-A library for building [Three.js](https://threejs.org/) projects using React and Redux.
+Infastructure for building [Three.js](https://threejs.org/) projects using [ReactN](https://github.com/CharlesStover/reactn).
 
 See example usage: https://github.com/edwmurph/threejs
 
@@ -10,21 +10,9 @@ See example usage: https://github.com/edwmurph/threejs
 npm i threejs-r
 ```
 
-# Usage
+# Getting started
 
-1. Add ThreeJSR `threejsr` reducer to your root reducers:
-```
-// src/reducers/index.js
-import { combineReducers } from 'redux'
-import { reducer as threejsr } from 'threejs-r'
-
-export default combineReducers({
-  threejsr,
-  ...
-})
-```
-
-2. Extend ThreeJSR to build your own threejs scene:
+1. Extend ThreeJSR to build your own threejs scene:
 ```
 // src/threejs/sphere.js
 import * as THREE from 'three'
@@ -32,13 +20,8 @@ import { ThreeJSR } from 'threejs-r'
 
 export default class Sphere extends ThreeJSR {
   renderNextFrame({ threejsr }) {
-    if (threejsr.mouse) {
-      console.log('inside sphere:', threejsr.mouse)
-    }
-
     this.mesh.rotation.x += 0.001
     this.mesh.rotation.y += 0.001
-
     return super.renderNextFrame(threejsr)
   }
 
@@ -62,24 +45,49 @@ export default class Sphere extends ThreeJSR {
 }
 ```
 
-3. Add SafeThreeJSRComponent to one of your components:
+2. Add ThreeJSRComponent to one of your components:
 ```
 // src/components/App.js
-import React from 'react'
+import React from 'reactn'
 import Sphere from '../threejs/sphere'
-import { SafeThreeJSRComponent } from 'threejs-r'
+import { ThreeJSRComponent } from 'threejs-r'
 
-const events = {
-  onMouseDown: function(e) {
-    return { mouse: { x: e.screenX, y: e.screenY } }
-  }
+export default function () {
+  return (
+    <ThreeJSRComponent ThreeJSR={Sphere} />
+  )
 }
+```
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <SafeThreeJSRComponent ThreeJSR={Sphere} events={events} />
-    )
+# Affecting threejs scene from external component
+
+ThreeJSR relies on the `threejsr` attribute of ReactN's global state. Anything inserted into the `threejsr` prop of ReactN's global state will be available inside your implementation of ThreeJSR's `renderNextFrame` function.
+
+E.g. you can have a button that changes the color of a mesh:
+```
+// some component
+import React, { useGlobal } from 'reactn'
+
+export default function () {
+  const [threejsr, setThreejsr] = useGlobal('threejsr')
+  return (
+    <button onClick={() => setThreejsr({ color: 'blue' })}>Change color</button>
+  )
+}
+```
+
+```
+// your ThreeJSR implementation
+import { ThreeJSR } from 'threejs-r'
+export default class Sphere extends ThreeJSR {
+  renderNextFrame (threejsr) {
+    if (threejsr.color) {
+      this.mesh.material.color.set(threejsr.color)
+    }
+  }
+
+  createThreeScene () {
+    ...
   }
 }
 ```

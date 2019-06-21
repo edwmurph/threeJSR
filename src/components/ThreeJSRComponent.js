@@ -1,58 +1,41 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useGlobal, useRef, useEffect, useState } from 'reactn'
+import { ThreeJSR } from 'threejs-r'
+import './ThreeJSRComponent.css'
 
-class ThreeJSRComponent extends React.Component {
-  constructor (props) {
-    super(props)
-    this.ref = React.createRef()
-    this.threejs = new this.props.ThreeJSR(
-      this.ref,
-      timestamp => this.props.update({ timestamp })
-    )
+function ThreeJSRComponent (props) {
+  const [threejsr, setThreejsr] = useGlobal('threejsr')
+  const ref = useRef()
+  const dim = ref.current && ref.current.getBoundingClientRect()
+  const { width, height } = dim || {}
 
-    this.events = {}
-    Object.entries(this.props.events || {}).forEach(([key, fn]) => {
-      this.events[key] = e => this.props.threeJSR(fn(e))
-    })
-  }
+  const [threejs] = useState(() => {
+    return new props.ThreeJSR(ref, timestamp => setThreejsr({ timestamp }))
+  })
 
-  componentDidMount () {
-    this.threejs.afterMount()
-  }
+  useEffect(() => {
+    threejs.afterMount(width, height)
+    return () => threejs.cleanup()
+  }, [])
 
-  componentDidUpdate () {
-    this.threejs.renderNextFrame(this.props)
-  }
+  useEffect(() => {
+    threejs.onResize(width, height)
+  }, [width, height])
 
-  componentWillUnmount () {
-    this.threejs.cleanup()
-  }
+  useEffect(() => {
+    threejs.renderNextFrame(threejsr || {})
+  }, [threejsr])
 
-  render () {
-    return (
-      <div ref={this.ref} {...this.events} />
-    )
+  return (
+    <div className='full-screen fixed-top z--1' ref={ref} />
+  )
+}
+
+ThreeJSRComponent.propTypes = {
+  ThreeJSR: (props, propName) => {
+    if (!(props[ propName ].prototype instanceof ThreeJSR)) {
+      return new Error('ThreeJSR prop should be an instance of ThreeJSR')
+    }
   }
 }
 
-function mapStateToProps (state) {
-  return {
-    timestamp: state.timestamp,
-    threejsr: state.threejsr
-  }
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-    update: timestamp => dispatch({
-      type: 'TIMESTAMP',
-      timestamp
-    }),
-    threeJSR: e => dispatch({
-      type: 'THREEJSR',
-      e
-    })
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ThreeJSRComponent)
+export default ThreeJSRComponent

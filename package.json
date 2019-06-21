@@ -4,12 +4,11 @@
   "description": "A library for creating threejs components with react + redux",
   "main": "build/index.js",
   "scripts": {
-    "build": "babel src -d build",
+    "build": "babel src -d build --copy-files",
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "react": "^16",
-    "react-redux": "^7",
+    "reactn": "^2",
     "three": "^0"
   },
   "devDependencies": {
@@ -31,6 +30,6 @@
     "type": "git",
     "url": "git+https://github.com/edwmurph/threeJSR.git"
   },
-  "author": "Edward",
+  "author": "edward",
   "license": "ISC"
 }

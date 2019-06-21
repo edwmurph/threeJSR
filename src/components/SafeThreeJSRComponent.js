@@ -6,10 +6,7 @@ export default class SafeThreeJSRComponent extends React.Component {
   render () {
     return (
       <ErrorBoundary>
-        <ThreeJSRComponent
-          ThreeJSR={this.props.ThreeJSR}
-          events={this.props.events}
-        />
+        <ThreeJSRComponent ThreeJSR={this.props.ThreeJSR} />
       </ErrorBoundary>
     )
   }

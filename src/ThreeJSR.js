@@ -7,22 +7,19 @@ export default class ThreeJSR {
     this.camera = {}
   }
 
-  // USAGE: call inside componentDidMount()
-  afterMount () {
+  afterMount (width, height) {
     ThreeJSR.verifyEnv()
-    window.addEventListener('resize', this.onResize.bind(this))
 
     this.createThreeScene()
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
 
-    this.onResize()
+    this.onResize(width, height)
     this.ref.current.appendChild(this.renderer.domElement)
 
     this.renderer.render(this.scene, this.camera)
     this.frameId = requestAnimationFrame(this.newFrameHook)
   }
 
-  // USAGE: call inside componentDidUpdate()
   renderNextFrame ({ timestamp } = {}) {
     if (timestamp) {
       this.renderer.render(this.scene, this.camera)
@@ -30,9 +27,7 @@ export default class ThreeJSR {
     }
   }
 
-  // USAGE: call inside componentWillUnmount()
   cleanup () {
-    window.removeEventListener('resize', this.onResize)
     if (this.frameId) {
       cancelAnimationFrame(this.frameId)
     }
@@ -42,9 +37,14 @@ export default class ThreeJSR {
     throw new Error('must implement createThreeScene()')
   }
 
-  onResize () {
-    this.width = window.innerWidth
-    this.height = Math.max(window.innerHeight - 200, 200)
+  onResize (width, height) {
+    if (!width || !height) return
+    const heightChanged = Math.abs(this.height - height) > 20
+    const widthChanged = Math.abs(this.width - width) > 20
+    if (!heightChanged && !widthChanged && this.width && this.height) return
+
+    this.width = width
+    this.height = Math.max(height, 200)
     this.camera.aspect = this.width / this.height
     this.camera.updateProjectionMatrix()
     this.renderer.setSize(this.width, this.height)
@@ -59,7 +59,7 @@ export default class ThreeJSR {
         throw new Error()
       }
     } catch (e) {
-      throw new Error('WebGL is not available on your browser')
+      throw new Error('WebGL is not available')
     }
   }
 }
