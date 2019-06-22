@@ -2,6 +2,9 @@
 
 Infastructure for building [three.js](https://threejs.org/) projects with ReactN.
 
+<a href="https://www.npmjs.com/package/threejs-r"><img src="https://img.shields.io/npm/v/threejs-r.svg?style=flat" alt="npm version"></a>
+<a href="https://www.npmjs.com/package/threejs-r" target="_blank"><img src="https://img.shields.io/npm/dm/threejs-r.svg" alt="npm downloads per month"></a>
+
 # Features
 
 - affect three.js scene from external components via [ReactN](https://github.com/CharlesStover/reactn) globally accessible state
