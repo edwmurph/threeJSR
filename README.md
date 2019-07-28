@@ -2,8 +2,8 @@
 
 Infastructure for building [three.js](https://threejs.org/) projects with React Redux hooks.
 
-<a href="https://www.npmjs.com/package/threejs-r"><img src="https://img.shields.io/npm/v/threejs-r.svg?style=flat" alt="npm version"></a>
-<a href="https://www.npmjs.com/package/threejs-r" target="_blank"><img src="https://img.shields.io/npm/dm/threejs-r.svg" alt="npm downloads per month"></a>
+<a href="https://www.npmjs.com/package/threejs-r"><img src="https://img.shields.io/npm/v/@edwmurph/threejsr.svg?style=flat" alt="npm version"></a>
+<a href="https://www.npmjs.com/package/threejs-r" target="_blank"><img src="https://img.shields.io/npm/dm/@edwmurph/threejsr.svg" alt="npm downloads per month"></a>
 
 # Features
 
