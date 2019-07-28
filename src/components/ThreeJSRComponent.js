@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { ThreeJSR } from 'threejs-r'
+import ThreeJSR from '../ThreeJSR'
 import './ThreeJSRComponent.css'
 
 function ThreeJSRComponent (props) {
