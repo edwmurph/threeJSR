@@ -1,15 +1,20 @@
-import React, { useGlobal, useRef, useEffect, useState } from 'reactn'
+import React, { useRef, useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { ThreeJSR } from 'threejs-r'
 import './ThreeJSRComponent.css'
 
 function ThreeJSRComponent (props) {
-  const [threejsr, setThreejsr] = useGlobal('threejsr')
+  const dispatch = useDispatch()
+  const threejsr = useSelector(_ => _.threejsr)
   const ref = useRef()
   const dim = ref.current && ref.current.getBoundingClientRect()
   const { width, height } = dim || {}
 
   const [threejs] = useState(() => {
-    return new props.ThreeJSR(ref, timestamp => setThreejsr({ timestamp }))
+    return new props.ThreeJSR(
+      ref,
+      timestamp => dispatch({ type: 'THREEJSR', threejsr: { timestamp } })
+    )
   })
 
   useEffect(() => {

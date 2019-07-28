@@ -1,13 +1,13 @@
 # ThreeJSR
 
-Infastructure for building [three.js](https://threejs.org/) projects with ReactN.
+Infastructure for building [three.js](https://threejs.org/) projects with React Redux hooks.
 
 <a href="https://www.npmjs.com/package/threejs-r"><img src="https://img.shields.io/npm/v/threejs-r.svg?style=flat" alt="npm version"></a>
 <a href="https://www.npmjs.com/package/threejs-r" target="_blank"><img src="https://img.shields.io/npm/dm/threejs-r.svg" alt="npm downloads per month"></a>
 
 # Features
 
-- affect three.js scene from external components via [ReactN](https://github.com/CharlesStover/reactn) globally accessible state
+- affect three.js scene from external components via react redux hooks
 - render three.js scene as a background that spans the full viewport and resizes when the browser size changes
 - three.js scene and render loop logic is defined with javascript to ensure consistency with the three.js docs
 
@@ -16,97 +16,77 @@ See example usage: https://github.com/edwmurph/threejs
 # Installation
 
 ```
-npm i threejs-r
+npm i @edwmurph/threejsr
 ```
 Also install required peer dependencies:
 ```
-npm i three reactn
+npm i three@^0 react@^16 react-redux@^7
 ```
 
 # Getting started
 
-1. Extend ThreeJSR to build your own threejs scene:
+1. Add ThreeJSR threejsr reducer to your root reducers:
+```
+// src/reducers/index.js
+import { combineReducers } from 'redux'
+import { reducer as threejsr } from '@edwmurph/threejsr'
+
+export default combineReducers({
+  threejsr,
+  ...
+})
+```
+
+2. Extend ThreeJSR to build your own threejs scene:
+
 ```
 // src/threejs/sphere.js
 import * as THREE from 'three'
-import { ThreeJSR } from 'threejs-r'
+import { ThreeJSR } from '@edwmurph/threejsr'
 
 export default class Sphere extends ThreeJSR {
-  renderNextFrame (threejsr) {
-    if (this.change < 100) {
-      this.spotLight.position.set(0, 50, this.change)
-      this.change = this.change + 0.5
-    }
-
-    if (threejsr.color) {
-      this.mesh.material.color.set(threejsr.color)
-    }
-
+  renderNextFrame({ threejsr }) {
     this.mesh.rotation.x += 0.001
     this.mesh.rotation.y += 0.001
 
     return super.renderNextFrame(threejsr)
   }
 
-  createThreeScene () {
-    this.change = 0
+  createThreeScene() {
     this.scene = new THREE.Scene()
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.1)
-    this.scene.add(ambient)
-
-    this.spotLight = new THREE.SpotLight(0xffffff)
-    this.spotLight.position.set(20, 20, 60)
-    this.spotLight.position.set(0, 50, 0)
-    this.scene.add(this.spotLight)
-
     this.camera = new THREE.PerspectiveCamera(75, 0, 0.1, 1000)
-    this.camera.position.set(0, 0, 100)
+    this.camera.position.z = 100
 
     const geometry = new THREE.SphereGeometry(40, 50, 30)
     const material = new THREE.MeshLambertMaterial({ color: 0xffffff, wireframe: true })
 
     this.mesh = new THREE.Mesh(geometry, material)
     this.scene.add(this.mesh)
+
+    const spotLight = new THREE.SpotLight(0xffffff)
+    spotLight.position.set(100, 10, 100)
+
+    this.scene.add(spotLight)
   }
-}
 ```
 
-2. Add ThreeJSRComponent to one of your components:
+3. Add ThreeJSRComponent to one of your components:
+
 ```
 // src/components/App.js
-import React, { useGlobal, useState } from 'reactn'
+import React from 'react'
 import Sphere from '../threejs/sphere'
-import { ThreeJSRComponent } from 'threejs-r'
+import { ThreeJSRComponent } from '@edwmurph/threejsr'
 
 export default function () {
-  const [, setThreejsr] = useGlobal('threejsr')
-  const [color, setColor] = useState()
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    setThreejsr({ color })
-  }
-
   return (
-    <div>
-      <ThreeJSRComponent ThreeJSR={Sphere} />
-      <div className='text-center'>
-        <form className='m-5 p-5' onSubmit={handleSubmit}>
-          <input name='color' onChange={(e) => setColor(e.target.value)} />
-          <button type='submit'>Set Color</button>
-        </form>
-        <h1 className='text-light m-5 p-5'>asdf</h1>
-        <h1 className='text-light m-5 p-5'>asdf</h1>
-        <h1 className='text-light m-5 p-5'>asdf</h1>
-        <h1 className='text-light m-5 p-5'>asdf</h1>
-      </div>
-    </div>
+    <ThreeJSRComponent ThreeJSR={Sphere} />
   )
 }
 ```
 
 # Affecting threejs scene from external component
 
-ThreeJSR relies on the `threejsr` attribute of ReactN's global state. Anything inserted into the `threejsr` prop of ReactN's global state will be available inside your implementation of ThreeJSR's `renderNextFrame` function. See example implementation linked above for more details.
+ThreeJSR subscribes to the `threejsr` object in redux state and any data passed in those events will be available inside your implementation of ThreeJSR's `renderNextFrame` function. See example implementation linked above for more details.
 
