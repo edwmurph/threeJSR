@@ -10,8 +10,8 @@ export default class ThreeJSR {
   afterMount (width, height) {
     ThreeJSR.verifyEnv()
 
-    this.createThreeScene()
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
+    this.createThreeScene()
 
     this.onResize(width, height)
     this.ref.current.appendChild(this.renderer.domElement)
