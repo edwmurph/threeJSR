@@ -8,8 +8,9 @@ Infastructure for building [three.js](https://threejs.org/) projects with React 
 # Features
 
 - affect three.js scene from external components via react redux hooks
-- render three.js scene as a background that spans the full viewport and resizes when the browser size changes
+- render three.js scene in dimensions set by parent element
 - three.js scene and render loop logic is defined with javascript to ensure consistency with the three.js docs
+- add post operation passes like the GlitchPass and UnrealBloomPass
 
 See example usage: https://github.com/edwmurph/threejs
 
@@ -44,7 +45,14 @@ export default combineReducers({
 import * as THREE from 'three'
 import { ThreeJSR } from '@edwmurph/threejsr'
 
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+
 export default class Sphere extends ThreeJSR {
+  constructor (ref, newFrameHook) {
+    const bloomPass = new UnrealBloomPass()
+    super(ref, newFrameHook, { passes: [bloomPass] })
+  }
+
   renderNextFrame({ threejsr }) {
     this.mesh.rotation.x += 0.001
     this.mesh.rotation.y += 0.001

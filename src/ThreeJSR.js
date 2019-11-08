@@ -1,10 +1,13 @@
 import * as THREE from 'three'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 
 export default class ThreeJSR {
-  constructor (ref, newFrameHook) {
+  constructor (ref, newFrameHook, opts = {}) {
     this.ref = ref
     this.newFrameHook = newFrameHook
     this.camera = {}
+    this.passes = opts.passes
   }
 
   afterMount (width, height) {
@@ -18,13 +21,24 @@ export default class ThreeJSR {
 
     this.renderer.render(this.scene, this.camera)
     this.frameId = requestAnimationFrame(this.newFrameHook)
+
+    if (this.passes.length) {
+      this.composer = new EffectComposer(this.renderer)
+
+      const renderPass = new RenderPass(this.scene, this.camera)
+      this.composer.addPass(renderPass)
+
+      this.passes.forEach(pass => this.composer.addPass(pass))
+    }
   }
 
   renderNextFrame ({ timestamp } = {}, postOp = () => {}) {
     if (timestamp) {
       this.renderer.render(this.scene, this.camera)
       this.frameId = requestAnimationFrame(this.newFrameHook)
-      postOp.call(this)
+      if (this.composer) {
+        this.composer.render()
+      }
     }
   }
 
