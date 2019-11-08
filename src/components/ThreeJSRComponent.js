@@ -1,7 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useLayoutEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ThreeJSR from '../ThreeJSR'
-import './ThreeJSRComponent.css'
 
 function ThreeJSRComponent (props) {
   const dispatch = useDispatch()
@@ -17,21 +16,21 @@ function ThreeJSRComponent (props) {
     )
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     threejs.afterMount(width, height)
     return () => threejs.cleanup()
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     threejs.onResize(width, height)
   }, [width, height])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     threejs.renderNextFrame(threejsr || {})
   }, [threejsr])
 
   return (
-    <div className='full-screen fixed-top z--1' ref={ref} />
+    <div style={{ width: '100%', height: '100%' }} ref={ref} />
   )
 }
 
