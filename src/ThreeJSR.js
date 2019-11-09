@@ -7,7 +7,7 @@ export default class ThreeJSR {
     this.ref = ref
     this.newFrameHook = newFrameHook
     this.camera = {}
-    this.passes = opts.passes
+    this.passes = opts.passes || []
   }
 
   afterMount (width, height) {
