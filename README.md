@@ -89,7 +89,7 @@ import { ThreeJSRComponent } from '@edwmurph/threejsr'
 
 export default function () {
   return (
-    <ThreeJSRComponent ThreeJSR={Sphere} />
+    <ThreeJSRComponent ThreeJSR={Sphere} style={{ border: '5px solid green' }} />
   )
 }
 ```

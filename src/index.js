@@ -1,4 +1,4 @@
-import ThreeJSRComponent from './components/SafeThreeJSRComponent'
+import ThreeJSRComponent from './components/ThreeJSRComponent'
 import ThreeJSR from './ThreeJSR'
 import reducer from './reducers/index'
 
