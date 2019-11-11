@@ -14,12 +14,14 @@ export default class ThreeJSR {
     ThreeJSR.verifyEnv()
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
+
     this.createThreeScene()
 
     this.onResize(width, height)
     this.ref.current.appendChild(this.renderer.domElement)
 
     this.renderer.render(this.scene, this.camera)
+    this.renderer.setPixelRatio(window.devicePixelRatio * 1.5)
     this.frameId = requestAnimationFrame(this.newFrameHook)
 
     if (this.passes.length) {
