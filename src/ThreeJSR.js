@@ -13,7 +13,7 @@ export default class ThreeJSR {
   afterMount (width, height) {
     ThreeJSR.verifyEnv()
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true })
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
 
     this.createThreeScene()
 
