@@ -53,7 +53,7 @@ ThreeJSRComponent.propTypes = {
       return new Error('ThreeJSR prop should be an instance of ThreeJSR')
     }
   },
-  name: PropTypes.String.required,
+  name: PropTypes.string.isRequired,
   style: PropTypes.object
 }
 
