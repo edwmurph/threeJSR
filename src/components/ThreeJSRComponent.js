@@ -3,16 +3,31 @@ import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import ThreeJSR from '../ThreeJSR'
 
-function ThreeJSRComponent (props) {
-  const dispatch = useDispatch()
-  const threejsr = useSelector(_ => _.threejsr)
-  const ref = useRef()
-  const [{ width, height }, setDims] = useState({})
+function uuid () {
+  let dt = new Date().getTime()
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (dt + Math.random() * 16) % 16 | 0
+    dt = Math.floor(dt / 16)
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+  })
+  return uuid
+}
 
+function ThreeJSRComponent (props) {
+  const ref = useRef()
+
+  const dispatch = useDispatch()
+
+  const threejsr = useSelector(_ => _.threejsr)
+
+  // needed to prevent multiple rendered threejs scenes from triggering
+  // eachother's update loop
+  const [id] = useState(uuid())
+  const [{ width, height }, setDims] = useState({})
   const [threejs] = useState(() => {
     return new props.ThreeJSR(
       ref,
-      timestamp => dispatch({ type: 'THREEJSR', threejsr: { timestamp } })
+      timestamp => dispatch({ type: 'THREEJSR', threejsr: { id, timestamp } })
     )
   })
 
@@ -23,14 +38,18 @@ function ThreeJSRComponent (props) {
     return () => threejs.cleanup()
   }, [])
 
+  // sync threejs render to dimensions provided by parent
   useLayoutEffect(() => {
     threejs.onResize(width, height)
   }, [width, height])
 
+  // animation loop
   useLayoutEffect(() => {
-    threejs.renderNextFrame(threejsr || {})
-    const dims = ref.current.getBoundingClientRect()
-    setDims({ width: dims.width, height: dims.height })
+    if (threejsr.id === id) {
+      threejs.renderNextFrame(threejsr || {})
+      const dims = ref.current.getBoundingClientRect()
+      setDims({ width: dims.width, height: dims.height })
+    }
   }, [threejsr])
 
   return (

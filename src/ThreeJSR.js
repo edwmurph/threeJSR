@@ -34,7 +34,7 @@ export default class ThreeJSR {
     }
   }
 
-  renderNextFrame ({ timestamp } = {}, postOp = () => {}) {
+  renderNextFrame ({ timestamp } = {}) {
     if (timestamp) {
       this.renderer.render(this.scene, this.camera)
       this.frameId = requestAnimationFrame(this.newFrameHook)
