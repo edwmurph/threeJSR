@@ -3,16 +3,6 @@ import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import ThreeJSR from '../ThreeJSR'
 
-function uuid () {
-  let dt = new Date().getTime()
-  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (dt + Math.random() * 16) % 16 | 0
-    dt = Math.floor(dt / 16)
-    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-  })
-  return uuid
-}
-
 function ThreeJSRComponent (props) {
   const ref = useRef()
 
@@ -20,15 +10,15 @@ function ThreeJSRComponent (props) {
 
   const threejsr = useSelector(_ => _.threejsr)
 
-  // needed to prevent multiple rendered threejs scenes from triggering
-  // eachother's update loop
-  const [id] = useState(uuid())
   const [{ width, height }, setDims] = useState({})
   const [threejs] = useState(() => {
-    return new props.ThreeJSR(
-      ref,
-      timestamp => dispatch({ type: 'THREEJSR', threejsr: { id, timestamp } })
-    )
+    return new props.ThreeJSR(ref, timestamp => dispatch({
+      type: 'THREEJSR',
+      threejsr: {
+        name: props.name,
+        timestamp
+      }
+    }))
   })
 
   useLayoutEffect(() => {
@@ -45,7 +35,7 @@ function ThreeJSRComponent (props) {
 
   // animation loop
   useLayoutEffect(() => {
-    if (threejsr.id === id) {
+    if (threejsr.name === props.name) {
       threejs.renderNextFrame(threejsr || {})
       const dims = ref.current.getBoundingClientRect()
       setDims({ width: dims.width, height: dims.height })
@@ -63,6 +53,7 @@ ThreeJSRComponent.propTypes = {
       return new Error('ThreeJSR prop should be an instance of ThreeJSR')
     }
   },
+  name: PropTypes.String.required,
   style: PropTypes.object
 }
 

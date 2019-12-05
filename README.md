@@ -89,7 +89,11 @@ import { ThreeJSRComponent } from '@edwmurph/threejsr'
 
 export default function () {
   return (
-    <ThreeJSRComponent ThreeJSR={Sphere} style={{ border: '5px solid green' }} />
+    <ThreeJSRComponent
+      ThreeJSR={Sphere}
+      name='sphere'
+      style={{ border: '5px solid green' }}
+    />
   )
 }
 ```
@@ -98,3 +102,10 @@ export default function () {
 
 ThreeJSR subscribes to the `threejsr` object in redux state and any data passed in those events will be available inside your implementation of ThreeJSR's `renderNextFrame` function. See example implementation linked above for more details.
 
+NOTE: to enable rendering multiple threejs scenes, a unique name prop is required when creating a ThreeJSRComponent element. Then to ensure your dispatched redux event goes to the correct ThreeJSR instance, include the name, e.g.:
+```
+dispatch({
+  type: 'THREEJSR',
+  threejsr: { name: 'sphere', spin: e.target.checked }
+})
+```
