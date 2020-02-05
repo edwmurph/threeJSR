@@ -8,18 +8,23 @@ function ThreeJSRComponent (props) {
 
   const dispatch = useDispatch()
 
-  const threejsr = useSelector(_ => _.threejsr)
+  const timestamp = useSelector(_ => _.threejsr[props.namespace].timestamp)
 
   const [{ width, height }, setDims] = useState({})
-  const [threejs] = useState(() => {
-    return new props.ThreeJSR(ref, timestamp => dispatch({
+
+  // called by `requestAnimationFrame()`
+  const newFrameHook = timestamp => {
+    return dispatch({
       type: 'THREEJSR',
       threejsr: {
-        name: props.name,
-        timestamp
+        [props.namespace]: {
+          timestamp
+        }
       }
-    }))
-  })
+    })
+  }
+
+  const [threejs] = useState(() => new props.ThreeJSR(ref, newFrameHook))
 
   useLayoutEffect(() => {
     threejs.afterMount(width, height)
@@ -35,12 +40,11 @@ function ThreeJSRComponent (props) {
 
   // animation loop
   useLayoutEffect(() => {
-    if (threejsr.name === props.name) {
-      threejs.renderNextFrame(threejsr || {})
-      const dims = ref.current.getBoundingClientRect()
-      setDims({ width: dims.width, height: dims.height })
-    }
-  }, [threejsr])
+    const renderLoopData = { ...(props.renderLoopData || {}), timestamp }
+    threejs.renderNextFrame(renderLoopData)
+    const dims = ref.current.getBoundingClientRect()
+    setDims({ width: dims.width, height: dims.height })
+  }, [props.renderLoopData, timestamp])
 
   return (
     <div style={{ width: '100%', height: '100%', ...props.style }} ref={ref} />
@@ -53,7 +57,7 @@ ThreeJSRComponent.propTypes = {
       return new Error('ThreeJSR prop should be an instance of ThreeJSR')
     }
   },
-  name: PropTypes.string.isRequired,
+  namespace: PropTypes.string.isRequired,
   style: PropTypes.object
 }
 

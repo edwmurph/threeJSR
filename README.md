@@ -82,16 +82,22 @@ export default class Sphere extends ThreeJSR {
 3. Add ThreeJSRComponent to one of your components:
 
 ```
-// src/components/App.js
+// src/components/app.js
 import React from 'react'
+import { useSelector } from 'react-redux'
 import Sphere from '../threejs/sphere'
-import { ThreeJSRComponent } from '@edwmurph/threejsr'
+import { ThreeJSRComponent, threejsrSelector } from '@edwmurph/threejsr'
 
 export default function () {
+  const renderLoopData = {
+    spin: useSelector(threejsrSelector('SPHERE', state => state.spin))
+  }
+
   return (
     <ThreeJSRComponent
       ThreeJSR={Sphere}
-      name='sphere'
+      namespace='SPHERE'
+      renderLoopData={renderLoopData}
       style={{ border: '5px solid green' }}
     />
   )
@@ -100,12 +106,21 @@ export default function () {
 
 # Affecting threejs scene from external component
 
-ThreeJSR subscribes to the `threejsr` object in redux state and any data passed in those events will be available inside your implementation of ThreeJSR's `renderNextFrame` function. See example implementation linked above for more details.
-
-NOTE: to enable rendering multiple threejs scenes, a unique name prop is required when creating a ThreeJSRComponent element. Then to ensure your dispatched redux event goes to the correct ThreeJSR instance, include the name, e.g.:
 ```
-dispatch({
-  type: 'THREEJSR',
-  threejsr: { name: 'sphere', spin: e.target.checked }
-})
+// src/components/external-component.js
+impot React from 'react'
+import { useDispatch } from 'react-redux'
+import { updateThreejsrData } from @edwmurph/threejsr
+
+const ExternalComponent = () => {
+  const dispatch =  useDispatch()
+
+  useEffect(() => {
+    dispatch(updateThreejsrData('SPHERE', { spin: true }))
+  }, [])
+
+  return (<div />)
+}
+
+export default ExternalComponent
 ```
