@@ -1,30 +1,14 @@
 import React, { useRef, useLayoutEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector, useDispatch } from 'react-redux'
 import ThreeJSR from '../ThreeJSR'
 
 function ThreeJSRComponent (props) {
   const ref = useRef()
 
-  const dispatch = useDispatch()
-
-  const timestamp = useSelector(_ => _.threejsr[props.namespace].timestamp)
-
   const [{ width, height }, setDims] = useState({})
+  const [timestamp, setTimestamp] = useState()
 
-  // called by `requestAnimationFrame()`
-  const newFrameHook = timestamp => {
-    return dispatch({
-      type: 'THREEJSR',
-      threejsr: {
-        [props.namespace]: {
-          timestamp
-        }
-      }
-    })
-  }
-
-  const [threejs] = useState(() => new props.ThreeJSR(ref, newFrameHook))
+  const [threejs] = useState(() => new props.ThreeJSR(ref, setTimestamp))
 
   useLayoutEffect(() => {
     threejs.afterMount(width, height)
@@ -57,7 +41,6 @@ ThreeJSRComponent.propTypes = {
       return new Error('ThreeJSR prop should be an instance of ThreeJSR')
     }
   },
-  namespace: PropTypes.string.isRequired,
   style: PropTypes.object
 }
 

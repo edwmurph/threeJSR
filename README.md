@@ -1,18 +1,20 @@
 # ThreeJSR
 
-Infastructure for building [three.js](https://threejs.org/) projects with React Redux hooks.
+*UNDER DEVELOPMENT*
+
+React based library for [three.js](https://threejs.org/) projects.
 
 <a href="https://www.npmjs.com/package/threejs-r"><img src="https://img.shields.io/npm/v/@edwmurph/threejsr.svg?style=flat" alt="npm version"></a>
 <a href="https://www.npmjs.com/package/threejs-r" target="_blank"><img src="https://img.shields.io/npm/dm/@edwmurph/threejsr.svg" alt="npm downloads per month"></a>
 
 # Features
 
-- affect three.js scene from external components via react redux hooks
 - render three.js scene in dimensions set by parent element
 - three.js scene and render loop logic is defined with javascript to ensure consistency with the three.js docs
 - add post operation passes like the GlitchPass and UnrealBloomPass
+- threejs environment requirement error handling with customizable error boundary
 
-See example usage: https://github.com/edwmurph/threejs
+See example usage: https://github.com/edwmurph/threejs (out of date)
 
 # Installation
 
@@ -21,24 +23,12 @@ npm i @edwmurph/threejsr
 ```
 Also install required peer dependencies:
 ```
-npm i three@^0 react@^16 react-redux@^7
+npm i three@^0 react@^16
 ```
 
 # Getting started
 
-1. Add ThreeJSR threejsr reducer to your root reducers:
-```
-// src/reducers/index.js
-import { combineReducers } from 'redux'
-import { reducer as threejsr } from '@edwmurph/threejsr'
-
-export default combineReducers({
-  threejsr,
-  ...
-})
-```
-
-2. Extend ThreeJSR to build your own threejs scene:
+1. Extend ThreeJSR to build your own threejs scene:
 
 ```
 // src/threejs/sphere.js
@@ -53,11 +43,13 @@ export default class Sphere extends ThreeJSR {
     super(ref, newFrameHook, { passes: [bloomPass] })
   }
 
-  renderNextFrame({ threejsr }) {
-    this.mesh.rotation.x += 0.001
-    this.mesh.rotation.y += 0.001
+  renderNextFrame({ spin, timestamp }) {
+    if (spin) {
+      this.mesh.rotation.x += 0.001
+      this.mesh.rotation.y += 0.001
+    }
 
-    return super.renderNextFrame(threejsr)
+    return super.renderNextFrame(timestamp)
   }
 
   createThreeScene() {
@@ -79,48 +71,25 @@ export default class Sphere extends ThreeJSR {
   }
 ```
 
-3. Add ThreeJSRComponent to one of your components:
+2. Add ThreeJSRComponent to one of your components:
 
 ```
 // src/components/app.js
 import React from 'react'
-import { useSelector } from 'react-redux'
 import Sphere from '../threejs/sphere'
-import { ThreeJSRComponent, threejsrSelector } from '@edwmurph/threejsr'
+import { ThreeJSRComponent } from '@edwmurph/threejsr'
 
 export default function () {
   const renderLoopData = {
-    spin: useSelector(threejsrSelector('SPHERE', state => state.spin))
+    spin: true
   }
 
   return (
     <ThreeJSRComponent
       ThreeJSR={Sphere}
-      namespace='SPHERE'
       renderLoopData={renderLoopData}
       style={{ border: '5px solid green' }}
     />
   )
 }
-```
-
-# Affecting threejs scene from external component
-
-```
-// src/components/external-component.js
-impot React from 'react'
-import { useDispatch } from 'react-redux'
-import { updateThreejsrData } from @edwmurph/threejsr
-
-const ExternalComponent = () => {
-  const dispatch =  useDispatch()
-
-  useEffect(() => {
-    dispatch(updateThreejsrData('SPHERE', { spin: true }))
-  }, [])
-
-  return (<div />)
-}
-
-export default ExternalComponent
 ```
