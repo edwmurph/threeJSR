@@ -37,7 +37,7 @@ function ThreeJSRComponent (props) {
 
 ThreeJSRComponent.propTypes = {
   ThreeJSR: (props, propName) => {
-    if (!(props[ propName ].prototype instanceof ThreeJSR)) {
+    if (!(props[propName].prototype instanceof ThreeJSR)) {
       return new Error('ThreeJSR prop should be an instance of ThreeJSR')
     }
   },
