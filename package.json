@@ -4,6 +4,7 @@
   "description": "A library for creating threejs components with react",
   "main": "build/index.js",
   "scripts": {
+    "lint": "eslint .",
     "build": "babel src -d build --copy-files",
     "prepare": "npm run build"
   },
