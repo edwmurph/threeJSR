@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export default class ThreeJSR {
   constructor (ref, newFrameHook, opts = {}) {
@@ -8,6 +10,8 @@ export default class ThreeJSR {
     this.newFrameHook = newFrameHook
     this.camera = {}
     this.passes = opts.passes || []
+    this.updates = []
+    this.controls = {}
   }
 
   afterMount (width, height) {
@@ -36,12 +40,33 @@ export default class ThreeJSR {
 
   renderNextFrame (timestamp) {
     if (timestamp) {
+      this.updates.forEach(update => update())
       this.renderer.render(this.scene, this.camera)
       this.frameId = requestAnimationFrame(this.newFrameHook)
       if (this.composer) {
         this.composer.render()
       }
     }
+  }
+
+  addControls () {
+    const trackball = new TrackballControls(this.camera, this.renderer.domElement)
+    trackball.rotateSpeed = 1.0
+    trackball.zoomSpeed = 1.2
+    trackball.panSpeed = 0.8
+    trackball.keys = [65, 83, 68]
+
+    const orbit = new OrbitControls(this.camera, this.renderer.domElement)
+
+    Object.assign(this.controls, { trackball, orbit })
+
+    trackball.update()
+    orbit.update()
+
+    this.updates.push(
+      () => trackball.update(),
+      () => orbit.update()
+    )
   }
 
   cleanup () {
