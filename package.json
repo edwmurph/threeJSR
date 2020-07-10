@@ -1,6 +1,6 @@
 {
   "name": "@edwmurph/threejsr",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "A library for creating threejs components with react",
   "main": "build/index.js",
   "scripts": {
@@ -13,7 +13,6 @@
     "three": "^0"
   },
   "dependencies": {
-    "prop-types": "15.7.2"
   },
   "devDependencies": {
     "@babel/cli": "7.10.4",
@@ -21,14 +20,11 @@
     "@babel/preset-env": "7.10.4",
     "@babel/preset-react": "7.10.4",
     "babel-eslint": "10.1.0",
-    "eslint": "7.4.0",
-    "eslint-config-standard": "14.1.1",
-    "eslint-config-standard-react": "9.2.0",
-    "eslint-plugin-import": "2.22.0",
-    "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-promise": "4.2.1",
-    "eslint-plugin-react": "7.20.3",
-    "eslint-plugin-standard": "4.0.1"
+    "eslint": "6.8.0",
+    "eslint-config-airbnb-base": "14.1.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-prefer-arrow": "1.1.7",
+    "eslint-plugin-react": "7.19.0"
   },
   "repository": {
     "type": "git",

@@ -1,16 +1,18 @@
-export default function threejsr (previousState = {}, action) {
+const threejsr = (previousState = {}, action) => {
   if (action.type !== 'THREEJSR') {
-    return previousState
+    return previousState;
   }
 
-  const namespace = Object.keys(action.threejsr)[0]
+  const namespace = Object.keys(action.threejsr)[0];
 
   return {
     ...previousState,
     [namespace]: {
       ...previousState[namespace],
       timestamp: null, // old timestamps shouldnt remain in state
-      ...action.threejsr[namespace]
-    }
-  }
-}
+      ...action.threejsr[namespace],
+    },
+  };
+};
+
+export default threejsr;
