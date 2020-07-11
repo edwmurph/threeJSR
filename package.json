@@ -5,6 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
     "build": "babel src -d build --copy-files",
     "prepare": "npm run build"
   },
@@ -12,19 +13,13 @@
     "react": "^16",
     "three": "^0"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "7.10.4",
     "@babel/core": "7.10.4",
     "@babel/preset-env": "7.10.4",
     "@babel/preset-react": "7.10.4",
-    "babel-eslint": "10.1.0",
-    "eslint": "6.8.0",
-    "eslint-config-airbnb-base": "14.1.0",
-    "eslint-plugin-import": "2.20.1",
-    "eslint-plugin-prefer-arrow": "1.1.7",
-    "eslint-plugin-react": "7.19.0"
+    "@edwmurph/eslint-config": "0.0.1"
   },
   "repository": {
     "type": "git",
