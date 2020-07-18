@@ -4,6 +4,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+const { NODE_ENV } = process.env;
+
 export default class ThreeJSR {
   constructor(ref, newFrameHook, opts = {}) {
     this.ref = ref;
@@ -67,6 +69,15 @@ export default class ThreeJSR {
       () => trackball.update(),
       () => orbit.update(),
     );
+  }
+
+  addAxesHelper({ onlyDev = true, size = 200 } = {}) {
+    if (onlyDev && NODE_ENV !== 'development') {
+      return;
+    }
+
+    const axesHelper = new THREE.AxesHelper(size);
+    this.scene.add(axesHelper);
   }
 
   cleanup() {
