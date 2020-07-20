@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "lint": "eslint .",
-    "lint-fix": "eslint . --fix",
+    "lint:fix": "eslint . --fix",
     "build": "babel src -d build --copy-files",
     "prepare": "npm run build"
   },
