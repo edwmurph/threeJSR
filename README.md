@@ -14,7 +14,7 @@ React based library for [three.js](https://threejs.org/) projects.
 - add post operation passes like the GlitchPass and UnrealBloomPass
 - threejs environment requirement error handling with customizable error boundary
 
-See example usage: https://github.com/edwmurph/threejs (out of date)
+See example usage: https://github.com/edwmurph/threejs
 
 # Installation
 
@@ -32,64 +32,69 @@ npm i three@^0 react@^16
 
 ```
 // src/threejs/sphere.js
-import * as THREE from 'three'
-import { ThreeJSR } from '@edwmurph/threejsr'
+import * as THREE from 'three';
+import { ThreeJSR } from '@edwmurph/threejsr';
 
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
-export default class Sphere extends ThreeJSR {
+class Sphere extends ThreeJSR {
   constructor (ref, newFrameHook) {
-    const bloomPass = new UnrealBloomPass()
-    super(ref, newFrameHook, { passes: [bloomPass] })
+    const bloomPass = new UnrealBloomPass();
+    super(ref, newFrameHook, { passes: [bloomPass] });
   }
 
   renderNextFrame({ spin, timestamp }) {
     if (spin) {
-      this.mesh.rotation.x += 0.001
-      this.mesh.rotation.y += 0.001
+      this.mesh.rotation.x += 0.001;
+      this.mesh.rotation.y += 0.001;
     }
 
-    return super.renderNextFrame(timestamp)
+    return super.renderNextFrame(timestamp);
   }
 
   createThreeScene() {
-    this.scene = new THREE.Scene()
+    this.scene = new THREE.Scene();
 
-    this.camera = new THREE.PerspectiveCamera(75, 0, 0.1, 1000)
-    this.camera.position.z = 100
+    this.camera = new THREE.PerspectiveCamera(75, 0, 0.1, 1000);
+    this.camera.position.z = 100;
 
-    const geometry = new THREE.SphereGeometry(40, 50, 30)
-    const material = new THREE.MeshLambertMaterial({ color: 0xffffff, wireframe: true })
+    const geometry = new THREE.SphereGeometry(40, 50, 30);
+    const material = new THREE.MeshLambertMaterial({ color: 0xffffff, wireframe: true });
 
-    this.mesh = new THREE.Mesh(geometry, material)
-    this.scene.add(this.mesh)
+    this.mesh = new THREE.Mesh(geometry, material);
+    this.scene.add(this.mesh);
 
-    const spotLight = new THREE.SpotLight(0xffffff)
-    spotLight.position.set(100, 10, 100)
+    const spotLight = new THREE.SpotLight(0xffffff);
+    spotLight.position.set(100, 10, 100);
 
-    this.scene.add(spotLight)
+    this.scene.add(spotLight);
   }
+}
+
+export default Sphere;
 ```
 
 2. Add ThreeJSRComponent to one of your components:
 
 ```
 // src/components/app.js
-import React from 'react'
-import Sphere from '../threejs/sphere'
-import { ThreeJSRComponent } from '@edwmurph/threejsr'
+import React from 'react';
+import Sphere from '../threejs/sphere';
+import { ThreeJSRComponent } from '@edwmurph/threejsr';
 
-export default function () {
-  const renderLoopData = {
-    spin: true
-  }
+const renderLoopData = {
+  spin: true
+};
 
+const Component = () => {
   return (
     <ThreeJSRComponent
       ThreeJSR={Sphere}
       renderLoopData={renderLoopData}
       style={{ border: '5px solid green' }}
     />
-  )
-}
+  );
+};
+
+export default Component;
 ```
