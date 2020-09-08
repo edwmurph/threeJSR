@@ -16,18 +16,17 @@ export default class ThreeJSR {
     this.controls = {};
   }
 
-  afterMount(width, height) {
+  afterMount() {
     ThreeJSR.verifyEnv();
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.ref.current,
+      antialias: true,
+    });
 
     this.createThreeScene();
 
-    this.onResize(width, height);
-    this.ref.current.appendChild(this.renderer.domElement);
-
     this.renderer.render(this.scene, this.camera);
-    this.renderer.setPixelRatio(window.devicePixelRatio * 1.5);
     this.frameId = requestAnimationFrame(this.newFrameHook);
 
     if (this.passes.length) {
@@ -42,6 +41,7 @@ export default class ThreeJSR {
 
   renderNextFrame(timestamp) {
     if (timestamp) {
+      this.resize();
       this.updates.forEach((update) => update());
       this.renderer.render(this.scene, this.camera);
       this.frameId = requestAnimationFrame(this.newFrameHook);
@@ -90,17 +90,23 @@ export default class ThreeJSR {
     throw new Error('must implement createThreeScene()');
   }
 
-  onResize(width, height) {
-    if (!width || !height) return;
-    const heightChanged = Math.abs(this.height - height) > 20;
-    const widthChanged = Math.abs(this.width - width) > 20;
-    if (!heightChanged && !widthChanged && this.width && this.height) return;
+  resize() {
+    const canvas = this.renderer.domElement;
 
-    this.width = width;
-    this.height = Math.max(height, 200);
-    this.camera.aspect = this.width / this.height;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.width, this.height);
+    const pixelRatio = window.devicePixelRatio;
+    const width = canvas.clientWidth * pixelRatio | 0; // eslint-disable-line no-bitwise
+    // eslint-disable-next-line no-bitwise
+    const height = canvas.parentElement.clientHeight * pixelRatio | 0;
+    const buffer = 5;
+
+    const needResize = canvas.width !== width
+      || (canvas.height >= height - buffer && canvas.height <= height + buffer);
+
+    if (needResize) {
+      this.renderer.setSize(width, height, false);
+      this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      this.camera.updateProjectionMatrix();
+    }
   }
 
   static verifyEnv() {
