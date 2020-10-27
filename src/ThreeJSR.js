@@ -7,13 +7,14 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 const { NODE_ENV } = process.env;
 
 export default class ThreeJSR {
-  constructor(ref, newFrameHook, opts = {}) {
+  init(ref, newFrameHook, opts = {}) {
     this.ref = ref;
     this.newFrameHook = newFrameHook;
     this.camera = {};
     this.passes = opts.passes || [];
     this.updates = [];
     this.controls = {};
+    return this;
   }
 
   afterMount() {
