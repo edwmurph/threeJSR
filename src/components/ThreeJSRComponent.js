@@ -5,7 +5,7 @@ const ThreeJSRComponent = (props) => {
 
   const [timestamp, setTimestamp] = useState();
 
-  const [threejs] = useState(() => new props.ThreeJSR(ref, setTimestamp));
+  const [threejs] = useState(() => props.ThreeJSR.init(ref, setTimestamp));
 
   useLayoutEffect(() => {
     threejs.afterMount();

@@ -71,7 +71,7 @@ class Sphere extends ThreeJSR {
   }
 }
 
-export default Sphere;
+export default new Sphere();
 ```
 
 2. Add ThreeJSRComponent to one of your components:
