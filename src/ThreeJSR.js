@@ -52,6 +52,7 @@ export default class ThreeJSR {
     }
   }
 
+  // deprecated
   addControls() {
     const trackball = new TrackballControls(this.camera, this.renderer.domElement);
     trackball.rotateSpeed = 1.0;

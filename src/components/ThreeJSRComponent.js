@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 const ThreeJSRComponent = (props) => {
   const ref = useRef();
@@ -7,13 +7,13 @@ const ThreeJSRComponent = (props) => {
 
   const [threejs] = useState(() => props.ThreeJSR.init(ref, setTimestamp));
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     threejs.afterMount();
     return () => threejs.cleanup();
   }, []);
 
   // animation loop
-  useLayoutEffect(() => {
+  useEffect(() => {
     const renderLoopData = { ...(props.renderLoopData || {}), timestamp };
     threejs.renderNextFrame(renderLoopData);
   }, [props.renderLoopData, timestamp]);

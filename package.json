@@ -1,6 +1,6 @@
 {
   "name": "@edwmurph/threejsr",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "A library for creating threejs components with react",
   "main": "build/index.js",
   "scripts": {
@@ -10,16 +10,16 @@
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "react": "^16",
+    "react": "^17",
     "three": "^0"
   },
   "dependencies": {},
   "devDependencies": {
-    "@babel/cli": "7.10.4",
-    "@babel/core": "7.10.4",
-    "@babel/preset-env": "7.10.4",
-    "@babel/preset-react": "7.10.4",
-    "@edwmurph/eslint-config": "0.0.1"
+    "@babel/cli": "7.15.7",
+    "@babel/core": "7.15.5",
+    "@babel/preset-env": "7.15.6",
+    "@babel/preset-react": "7.14.5",
+    "@edwmurph/eslint-config": "0.1.1"
   },
   "repository": {
     "type": "git",
