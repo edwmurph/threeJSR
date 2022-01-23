@@ -1,6 +1,6 @@
 {
   "name": "@edwmurph/threejsr",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "A library for creating threejs components with react",
   "main": "build/index.js",
   "scripts": {

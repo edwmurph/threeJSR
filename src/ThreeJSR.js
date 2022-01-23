@@ -6,6 +6,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const { NODE_ENV } = process.env;
 
+const RESIZE = Symbol('RESIZE');
+
 export default class ThreeJSR {
   init(ref, newFrameHook, opts = {}) {
     this.ref = ref;
@@ -42,7 +44,7 @@ export default class ThreeJSR {
 
   renderNextFrame(timestamp) {
     if (timestamp) {
-      this.resize();
+      this[RESIZE]();
       this.updates.forEach((update) => update());
       this.renderer.render(this.scene, this.camera);
       this.frameId = requestAnimationFrame(this.newFrameHook);
@@ -93,6 +95,10 @@ export default class ThreeJSR {
   }
 
   resize() {
+    // TODO override this hook for responsive canvas size logic
+  }
+
+  [RESIZE]() {
     const canvas = this.renderer.domElement;
 
     const pixelRatio = window.devicePixelRatio;
@@ -102,12 +108,13 @@ export default class ThreeJSR {
     const buffer = 5;
 
     const needResize = canvas.width !== width
-      || (canvas.height >= height - buffer && canvas.height <= height + buffer);
+      || Math.abs(canvas.height - height - buffer) > 5;
 
     if (needResize) {
       this.renderer.setSize(width, height, false);
       this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
       this.camera.updateProjectionMatrix();
+      this.resize(width, height);
     }
   }
 
